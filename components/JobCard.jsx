@@ -1,6 +1,7 @@
 import moment from 'moment';
 import Link from 'next/link';
 import { deleteFile } from '../lib/firebase';
+import ModalWindow from './ModalWindow';
 
 export const JobCard = ({ job, deleteJob }) => {
   const { client, jobParts, _id, createdAt, updatedAt, downloadURL } = job;
@@ -75,12 +76,13 @@ export const JobCard = ({ job, deleteJob }) => {
         );
       })}
       <div className="p-4 flex flex-row justify-between">
-        <button
+        {/* <button
           onClick={() => deleteJob(_id)}
           className="rounded-full bg-red-400 hover:bg-red-500 px-4 py-2 text-white font-medium "
         >
           Remove
-        </button>
+        </button> */}
+        <ModalWindow deleteJob={deleteJob} id={_id} />
         <div className="flex gap-2">
           <a
             href={downloadURL}

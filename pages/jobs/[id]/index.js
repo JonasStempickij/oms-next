@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import Form from '../../../components/Form';
+import ModalWindow from '../../../components/ModalWindow';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
@@ -88,6 +89,7 @@ const EditJob = () => {
   return (
     <>
       <h2 className="text-center text-3xl ">Edit Job</h2>
+      <ModalWindow></ModalWindow>
       {isLoading ? (
         <div>Loading</div>
       ) : (
