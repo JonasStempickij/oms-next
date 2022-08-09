@@ -97,8 +97,15 @@ export default function AddJob() {
             />
           </div>
           {jobParts.map((jobPart, index) => {
-            const { partName, material, orderedQty, finishedQty, thickness } =
-              jobPart;
+            const {
+              partName,
+              material,
+              orderedQty,
+              finishedQty,
+              thickness,
+              pvc,
+              surface,
+            } = jobPart;
             return (
               <div className="flex flex-col pt-2 gap-1.5" key={index}>
                 <div className="flex flex-col gap-1">
@@ -139,6 +146,57 @@ export default function AddJob() {
                       })}
                     </select>
                   </div>
+                  {materialOptions.map((materialOption, matIndex) => {
+                    if (
+                      materialOption.materialName === material &&
+                      materialOption.hasSurf
+                    ) {
+                      return (
+                        <div key={matIndex} className="flex flex-col  gap-1">
+                          <label className="text-xs text-gray-500">
+                            Surface
+                          </label>
+                          <select
+                            className="h-full w-52 text-base px-4 py-2.5 border border-gray-400 rounded"
+                            name="surface"
+                            value={surface}
+                            onChange={(e) => {
+                              handleInputChange(e, index);
+                            }}
+                          >
+                            {materialOption.surfOptions.map(
+                              (surfOption, index) => {
+                                return (
+                                  <option key={index} value={surfOption}>
+                                    {surfOption}
+                                  </option>
+                                );
+                              }
+                            )}
+                          </select>
+                        </div>
+                      );
+                    }
+                  })}
+                  {materialOptions.map((materialOption, matIndex) => {
+                    if (
+                      materialOption.materialName === material &&
+                      materialOption.hasPVC
+                    ) {
+                      return (
+                        <div key={matIndex} className="flex flex-col  gap-3">
+                          <label className="text-xs text-gray-500">PVC</label>
+                          <input
+                            defaultChecked={pvc}
+                            name="pvc"
+                            type="checkbox"
+                            onChange={(e) => handleInputChange(e, index)}
+                            className="w-6 h-6"
+                          />
+                        </div>
+                      );
+                    }
+                  })}
                   <div className="flex flex-col gap-1">
                     <label
                       className="text-xs text-gray-500"
