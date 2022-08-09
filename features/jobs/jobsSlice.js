@@ -2,16 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { deleteFile } from '../../lib/firebase';
 import jobService from './jobService';
 
-const materialOptions = [
-  {
-    materialName: 'S235',
-    surfaceOptions: [],
-  },
-  {
-    materialName: 'AISI304',
-    surfaceOptions: ['GRIT', '2B'],
-  },
-];
+import { materialOptions } from '../../lib/materialOptions';
 
 const initialState = {
   isLoading: false,
@@ -45,6 +36,7 @@ const jobsSlice = createSlice({
       if (name === 'client') {
         state.currentJob[name] = value;
       } else {
+        console.log(index, name, value);
         state.currentJob.jobParts[index][name] = value;
       }
     },

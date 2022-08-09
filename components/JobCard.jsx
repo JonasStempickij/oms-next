@@ -27,6 +27,7 @@ export const JobCard = ({ job, deleteJob }) => {
           partName,
           material,
           surface,
+          pvc,
           thickness,
           orderedQty,
           finishedQty,
@@ -58,6 +59,11 @@ export const JobCard = ({ job, deleteJob }) => {
                 {surface && (
                   <span className="text-sm px-4 py-1.5 font-semibold bg-gray-200 rounded">
                     {surface}
+                  </span>
+                )}
+                {pvc && (
+                  <span className="text-sm px-4 py-1.5 font-semibold bg-gray-200 rounded">
+                    +PVC
                   </span>
                 )}
                 <span className="text-sm px-4 py-1.5 font-semibold bg-gray-200 rounded">

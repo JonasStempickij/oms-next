@@ -1,8 +1,9 @@
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Form from '../../../components/Form';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import { uploadFile } from '../../../lib/firebase';
 import {
   setInputField,
   addJobPart,
@@ -10,9 +11,8 @@ import {
   deleteJob,
   updateJob,
   removeJobPart,
+  setFileName,
 } from '../../../features/jobs/jobsSlice';
-
-import { downloadFile } from '../../../lib/firebase';
 
 const EditJob = () => {
   const dispatch = useDispatch();
@@ -24,7 +24,7 @@ const EditJob = () => {
     (state) => state.jobState
   );
 
-  const [downloadURL, setDownloadURL] = useState('');
+  const [file, setFile] = useState(null);
 
   useEffect(() => {
     if (id) {
@@ -33,8 +33,13 @@ const EditJob = () => {
   }, [dispatch, id]);
 
   const handleInputChange = (e, index) => {
+    let value;
+    if (e.target.type === 'checkbox') {
+      value = e.target.checked;
+    } else {
+      value = e.target.value;
+    }
     const name = e.target.name;
-    const value = e.target.value;
     dispatch(setInputField({ name, value, index }));
   };
 
@@ -58,7 +63,27 @@ const EditJob = () => {
     router.push('/');
   };
 
-  const handleFile = async () => {};
+  const handleFileChange = async (e) => {
+    if (e.target.files.length === 1) {
+      await setFile(e.target.files[0]);
+    }
+  };
+
+  const handleFileUpload = async () => {
+    try {
+      await dispatch(setFileName(file.name));
+      const downloadURL = await uploadFile(file, id);
+      console.log(downloadURL);
+      const updated = await dispatch(
+        updateJob({ _id: id, downloadURL, fileName: file.name })
+      );
+      toast.success('Files uploaded');
+      console.log(updated);
+    } catch (error) {
+      toast.error('Something went wrong');
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -74,7 +99,8 @@ const EditJob = () => {
             handleDeleteJob={handleDeleteJob}
             handleAddPart={handleAddPart}
             handleRemovePart={handleRemovePart}
-            handleFile={handleFile}
+            handleFileChange={handleFileChange}
+            handleFileUpload={handleFileUpload}
             handleUpdateJob={handleUpdateJob}
             materialOptions={materialOptions}
           />

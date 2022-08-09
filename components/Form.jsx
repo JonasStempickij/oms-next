@@ -5,7 +5,8 @@ const Form = ({
   handleInputChange,
   handleAddPart,
   handleRemovePart,
-  handleFile,
+  handleFileChange,
+  handleFileUpload,
   handleDeleteJob,
   handleUpdateJob,
   handleSubmitJob,
@@ -30,9 +31,17 @@ const Form = ({
           onChange={(e) => handleInputChange(e)}
         />
       </div>
+
       {jobParts.map((jobPart, index) => {
-        const { partName, material, orderedQty, finishedQty, thickness } =
-          jobPart;
+        const {
+          partName,
+          material,
+          orderedQty,
+          finishedQty,
+          thickness,
+          surface,
+          pvc,
+        } = jobPart;
         return (
           <div className="flex flex-col pt-2 gap-1.5" key={index}>
             <div className="flex flex-col gap-1">
@@ -74,6 +83,53 @@ const Form = ({
                   })}
                 </select>
               </div>
+              {materialOptions.map((materialOption, matIndex) => {
+                if (
+                  materialOption.materialName === material &&
+                  materialOption.hasSurf
+                ) {
+                  return (
+                    <div key={matIndex} className="flex flex-col  gap-1">
+                      <label className="text-xs text-gray-500">Surface</label>
+                      <select
+                        className="h-full w-52 text-base px-4 py-2.5 border border-gray-400 rounded"
+                        name="surface"
+                        value={surface}
+                        onChange={(e) => {
+                          handleInputChange(e, index);
+                        }}
+                      >
+                        {materialOption.surfOptions.map((surfOption, index) => {
+                          return (
+                            <option key={index} value={surfOption}>
+                              {surfOption}
+                            </option>
+                          );
+                        })}
+                      </select>
+                    </div>
+                  );
+                }
+              })}
+              {materialOptions.map((materialOption, matIndex) => {
+                if (
+                  materialOption.materialName === material &&
+                  materialOption.hasPVC
+                ) {
+                  return (
+                    <div key={matIndex} className="flex flex-col  gap-3">
+                      <label className="text-xs text-gray-500">PVC</label>
+                      <input
+                        defaultChecked={pvc}
+                        name="pvc"
+                        type="checkbox"
+                        onChange={(e) => handleInputChange(e, index)}
+                        className="w-6 h-6"
+                      />
+                    </div>
+                  );
+                }
+              })}
               <div className="flex flex-col gap-1">
                 <label className="text-xs text-gray-500" htmlFor="thickness">
                   Thickness
@@ -132,14 +188,26 @@ const Form = ({
           </div>
         );
       })}
-      <div className="flex gap-4 pt-2">
+
+      <div className="flex flex-col items-start gap-2">
+        <input className="" type="file" onChange={handleFileChange} />
         <button
+          type="button"
+          onClick={handleFileUpload}
+          className="rounded-full text-sm px-5 py-2 font-medium text-white bg-zinc-800 hover:bg-zinc-500"
+        >
+          Upload files
+        </button>
+      </div>
+
+      <div className="flex gap-4 pt-2">
+        {/* <button
           type="button"
           className="rounded-full text-sm px-6 py-2.5 font-medium text-white bg-slate-600 hover:bg-slate-500"
           onClick={handleFile}
         >
           Files
-        </button>
+        </button> */}
         <button className="btn" type="button" onClick={handleAddPart}>
           Add Part
         </button>

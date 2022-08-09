@@ -13,6 +13,8 @@ import { uploadFile } from '../lib/firebase';
 import Head from 'next/head';
 import { toast } from 'react-toastify';
 
+import { materialOptions } from '../lib/materialOptions';
+
 export default function AddJob() {
   const dispatch = useDispatch();
   const { currentJob, materialOptions } = useSelector(

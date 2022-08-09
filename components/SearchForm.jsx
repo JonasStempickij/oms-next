@@ -2,26 +2,14 @@ import React from 'react';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { getJobs } from '../features/jobs/jobsSlice';
+import { materialOptions } from '../lib/materialOptions';
 
 const SearchForm = () => {
   const dispatch = useDispatch();
 
-  const [material, setMaterial] = useState('All');
+  const [material, setMaterial] = useState(materialOptions[0].materialName);
   const [thickness, setThickness] = useState('');
   const [client, setClient] = useState('');
-
-  const materialOptions = [
-    'All',
-    'S235',
-    'DC01',
-    'S355MC ESD',
-    'AISI304',
-    'AISI316',
-    'AISI430',
-    'AW-5754',
-    'AW-1050',
-    'Zn',
-  ];
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -55,8 +43,8 @@ const SearchForm = () => {
         >
           {materialOptions.map((option, index) => {
             return (
-              <option key={index} value={option}>
-                {option}
+              <option key={index} value={option.materialName}>
+                {option.materialName}
               </option>
             );
           })}

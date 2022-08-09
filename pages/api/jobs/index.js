@@ -3,7 +3,7 @@ import Job from '../../../models/Job';
 
 export default async function handler(req, res) {
   const { method, query } = req;
-  console.log(query);
+  console.log(`Query ${JSON.stringify(query)}`);
   const { client, material, thickness } = query;
 
   await dbConnect();
@@ -11,27 +11,22 @@ export default async function handler(req, res) {
   switch (method) {
     case 'GET':
       try {
-        if (client === '') {
-          const jobs = await Job.find({});
-          res.status(200).json({ success: true, jobs });
-        } else {
-          if (material === 'All') {
-            const jobs = await Job.find({
-              'client': { $regex: client, $options: 'i' },
-              'jobParts.thickness': thickness,
-            });
-            res.status(200).json({ success: true, jobs });
-          } else {
-            console.log('not all');
-            const jobs = await Job.find({
-              'client': { $regex: client, $options: 'i' },
-              'jobParts.material': material,
-              'jobParts.thickness': thickness,
-            });
-            res.status(200).json({ success: true, jobs });
-          }
-        } /* find all the data in our database */
+        const queryObject = {};
+
+        if (client) {
+          queryObject.client = { $regex: client, $options: 'i' };
+        }
+        if (material && material !== 'ALL') {
+          queryObject.jobParts = { $elemMatch: { material } };
+        }
+        if (thickness && thickness !== '0') {
+          queryObject.jobParts = { $elemMatch: { thickness } };
+        }
+        console.log(queryObject);
+        const jobs = await Job.find(queryObject);
+        res.status(201).json({ success: true, jobs });
       } catch (error) {
+        console.log(error);
         res.status(400).json({ success: false, error });
       }
       break;
