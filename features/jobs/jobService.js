@@ -10,8 +10,10 @@ const addJob = async (jobData) => {
 };
 
 // Get jobs (with filters)
-const getJobs = async () => {
-  const response = await axios.get(API_URL);
+const getJobs = async ({ client = '', material = '', thickness = '' }) => {
+  const response = await axios.get(
+    `${API_URL}?client=${client}&material=${material}&thickness=${thickness}`
+  );
 
   return response.data;
 };

@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { deleteFile } from '../../lib/firebase';
 import jobService from './jobService';
 
 const materialOptions = [
@@ -94,7 +95,6 @@ const jobsSlice = createSlice({
       })
       .addCase(deleteJob.fulfilled, (state, action) => {
         state.isLoading = false;
-        console.log(action.payload);
         state.jobs = state.jobs.filter((job) => job._id !== action.payload.id);
       });
   },
@@ -112,9 +112,9 @@ export const addJob = createAsyncThunk('jobs/create', async (jobData) => {
   }
 });
 
-export const getJobs = createAsyncThunk('jobs/getJobs', async () => {
+export const getJobs = createAsyncThunk('jobs/getJobs', async (filter = {}) => {
   try {
-    return await jobService.getJobs();
+    return await jobService.getJobs(filter);
   } catch (error) {
     const message =
       (error.response && error.response.data && error.response.data.message) ||
@@ -126,7 +126,9 @@ export const getJobs = createAsyncThunk('jobs/getJobs', async () => {
 
 export const deleteJob = createAsyncThunk('jobs/deleteJob', async (jobID) => {
   try {
-    return await jobService.deleteJob(jobID);
+    const response = await jobService.deleteJob(jobID);
+    await deleteFile(jobID);
+    return response;
   } catch (error) {
     const message =
       (error.response && error.response.data && error.response.data.message) ||

@@ -135,7 +135,7 @@ const Form = ({
       <div className="flex gap-4 pt-2">
         <button
           type="button"
-          className="rounded-full text-sm px-6 py-2.5 font-semibold text-white bg-slate-600 hover:bg-slate-500"
+          className="rounded-full text-sm px-6 py-2.5 font-medium text-white bg-slate-600 hover:bg-slate-500"
           onClick={handleFile}
         >
           Files
@@ -147,13 +147,13 @@ const Form = ({
           <button
             type="button"
             onClick={handleDeleteJob}
-            className="rounded-full text-sm px-6 py-2.5 font-semibold text-white bg-red-600 hover:bg-red-500"
+            className="rounded-full text-sm px-6 py-2.5 font-medium text-white bg-red-600 hover:bg-red-500"
           >
             Delete Job
           </button>
           {isEditJob && (
             <button
-              className="rounded-full text-sm px-6 py-2.5 font-semibold text-white bg-green-700 hover:bg-green-600"
+              className="rounded-full text-sm px-6 py-2.5 font-medium text-white bg-green-700 hover:bg-green-600"
               type="submit"
             >
               Update Job

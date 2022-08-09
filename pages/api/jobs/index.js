@@ -2,17 +2,37 @@ import dbConnect from '../../../lib/dbConnect';
 import Job from '../../../models/Job';
 
 export default async function handler(req, res) {
-  const { method } = req;
+  const { method, query } = req;
+  console.log(query);
+  const { client, material, thickness } = query;
 
   await dbConnect();
 
   switch (method) {
     case 'GET':
       try {
-        const jobs = await Job.find({}); /* find all the data in our database */
-        res.status(200).json({ success: true, jobs });
+        if (client === '') {
+          const jobs = await Job.find({});
+          res.status(200).json({ success: true, jobs });
+        } else {
+          if (material === 'All') {
+            const jobs = await Job.find({
+              'client': { $regex: client, $options: 'i' },
+              'jobParts.thickness': thickness,
+            });
+            res.status(200).json({ success: true, jobs });
+          } else {
+            console.log('not all');
+            const jobs = await Job.find({
+              'client': { $regex: client, $options: 'i' },
+              'jobParts.material': material,
+              'jobParts.thickness': thickness,
+            });
+            res.status(200).json({ success: true, jobs });
+          }
+        } /* find all the data in our database */
       } catch (error) {
-        res.status(400).json({ success: false });
+        res.status(400).json({ success: false, error });
       }
       break;
     case 'POST':

@@ -12,7 +12,7 @@ import {
   removeJobPart,
 } from '../../../features/jobs/jobsSlice';
 
-import { downloadFile } from '../../../lib/base';
+import { downloadFile } from '../../../lib/firebase';
 
 const EditJob = () => {
   const dispatch = useDispatch();
