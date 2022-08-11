@@ -44,12 +44,8 @@ const EditJob = () => {
     dispatch(setInputField({ name, value, index }));
   };
 
-  const handleAddPart = () => {
-    dispatch(addJobPart());
-  };
-
-  const handleRemovePart = (index) => {
-    dispatch(removeJobPart(index));
+  const handleToggleOpChange = (name, value) => {
+    dispatch(setInputField({ name, value: !value }));
   };
 
   const handleUpdateJob = (e) => {
@@ -89,7 +85,6 @@ const EditJob = () => {
   return (
     <>
       <h2 className="text-center text-3xl ">Edit Job</h2>
-      <ModalWindow></ModalWindow>
       {isLoading ? (
         <div>Loading</div>
       ) : (
@@ -99,8 +94,13 @@ const EditJob = () => {
             currentJob={currentJob}
             handleInputChange={handleInputChange}
             handleDeleteJob={handleDeleteJob}
-            handleAddPart={handleAddPart}
-            handleRemovePart={handleRemovePart}
+            addJobPart={() => {
+              dispatch(addJobPart());
+            }}
+            removeJobPart={() => {
+              dispatch(removeJobPart());
+            }}
+            handleToggleOpChange={handleToggleOpChange}
             handleFileChange={handleFileChange}
             handleFileUpload={handleFileUpload}
             handleUpdateJob={handleUpdateJob}

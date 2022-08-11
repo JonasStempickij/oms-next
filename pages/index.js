@@ -30,11 +30,9 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="">
+      <main className="container mx-auto px-10 flex flex-col gap-10">
         <SearchForm />
-        <h2 className="text-center my-5 text-3xl">Dashboard</h2>
-
-        <div className="px-5 md:columns-2 xl:columns-3 2xl:columns-4">
+        <div className="self-center md:columns-2 xl:columns-3 2xl:columns-4">
           {jobs.map((job, index) => {
             return (
               <JobCard job={job} key={index} deleteJob={handleDeleteJob} />

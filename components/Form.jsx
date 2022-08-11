@@ -1,34 +1,46 @@
+import { useState } from 'react';
+import InputField from './InputField';
+import ToggleTag from './ToggleTag';
+
 const Form = ({
   isEditJob,
   materialOptions,
   currentJob,
   handleInputChange,
-  handleAddPart,
-  handleRemovePart,
+  handleToggleOpChange,
+  addJobPart,
+  removeJobPart,
   handleFileChange,
   handleFileUpload,
   handleDeleteJob,
   handleUpdateJob,
   handleSubmitJob,
 }) => {
-  const { client, jobParts } = currentJob;
+  const { client, jobParts, weldOp, bendOp } = currentJob;
 
   return (
     <form
-      className="max-w-screen-md px-12 mx-auto flex flex-col gap-4 divide-y divide-gray-200"
+      className="flex flex-col max-w-screen-md mx-auto gap-4"
       onSubmit={isEditJob ? handleUpdateJob : handleSubmitJob}
     >
-      <div className="flex flex-col gap-1">
-        <label className="text-xs text-gray-500" htmlFor="client">
-          Client
-        </label>
-        <input
-          className="px-4 py-2.5 border border-gray-400 rounded"
-          type="text"
-          name="client"
-          value={client}
-          required
-          onChange={(e) => handleInputChange(e)}
+      <InputField
+        name="client"
+        value={client}
+        handleInputChange={handleInputChange}
+        required={true}
+      />
+      <div className="flex gap-4">
+        <ToggleTag
+          label="WELD"
+          name="weldOp"
+          value={weldOp}
+          toggleTagState={handleToggleOpChange}
+        />
+        <ToggleTag
+          label="BEND"
+          name="bendOp"
+          value={bendOp}
+          toggleTagState={handleToggleOpChange}
         />
       </div>
 
@@ -43,24 +55,16 @@ const Form = ({
           pvc,
         } = jobPart;
         return (
-          <div className="flex flex-col pt-2 gap-1.5" key={index}>
-            <div className="flex flex-col gap-1">
-              <label className="text-xs text-gray-500" htmlFor="name">
-                Part
-              </label>
-              <input
-                className="px-4 py-2.5 border border-gray-400 rounded"
-                type="text"
-                name="partName"
-                value={partName}
-                required
-                onChange={(e) => {
-                  handleInputChange(e, index);
-                }}
-              />
-            </div>
+          <div className="flex flex-col gap-1.5" key={index}>
+            <InputField
+              name="partName"
+              label="Part"
+              value={partName}
+              index={index}
+              handleInputChange={handleInputChange}
+            />
             <div className="flex gap-4">
-              <div className="flex flex-col  gap-1">
+              <div className="flex flex-col">
                 <label className="text-xs text-gray-500" htmlFor="material">
                   Material
                 </label>
@@ -83,6 +87,7 @@ const Form = ({
                   })}
                 </select>
               </div>
+
               {materialOptions.map((materialOption, matIndex) => {
                 if (
                   materialOption.materialName === material &&
@@ -111,6 +116,15 @@ const Form = ({
                   );
                 }
               })}
+
+              <InputField
+                name="thickness"
+                value={thickness}
+                type="number"
+                index={index}
+                handleInputChange={handleInputChange}
+              />
+
               {materialOptions.map((materialOption, matIndex) => {
                 if (
                   materialOption.materialName === material &&
@@ -118,97 +132,67 @@ const Form = ({
                 ) {
                   return (
                     <div key={matIndex} className="flex flex-col  gap-3">
-                      <label className="text-xs text-gray-500">PVC</label>
+                      <label className="text-xs text-gray-500">+PVC</label>
                       <input
                         defaultChecked={pvc}
                         name="pvc"
                         type="checkbox"
                         onChange={(e) => handleInputChange(e, index)}
-                        className="w-6 h-6"
+                        className="w-6 h-6 slate-800"
                       />
                     </div>
                   );
                 }
               })}
-              <div className="flex flex-col gap-1">
-                <label className="text-xs text-gray-500" htmlFor="thickness">
-                  Thickness
-                </label>
-                <input
-                  className="w-20 px-4 py-2.5 border border-gray-400 rounded"
-                  type="number"
-                  name="thickness"
-                  value={thickness}
-                  required
-                  onChange={(e) => {
-                    handleInputChange(e, index);
-                  }}
-                />
-              </div>
             </div>
             <div className="flex flex-row items-end gap-4">
-              <div className="flex flex-col gap-1">
-                <label className="text-xs text-gray-500" htmlFor="finishedQty">
-                  Finished
-                </label>
-                <input
-                  className="w-24 px-4 py-2.5 border border-gray-400 rounded"
-                  type="number"
+              {isEditJob && (
+                <InputField
                   name="finishedQty"
                   value={finishedQty}
-                  required
-                  onChange={(e) => {
-                    handleInputChange(e, index);
-                  }}
-                />
-              </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-xs text-gray-500" htmlFor="orderedQty">
-                  Ordered
-                </label>
-                <input
-                  className="w-24 px-4 py-2.5 border border-gray-400 rounded"
                   type="number"
-                  name="orderedQty"
-                  value={orderedQty}
-                  required
-                  onChange={(e) => {
-                    handleInputChange(e, index);
-                  }}
+                  label="Finished"
+                  index={index}
+                  handleInputChange={handleInputChange}
                 />
-              </div>
+              )}
+
+              <InputField
+                name="orderedQty"
+                value={orderedQty}
+                type="number"
+                label="Ordered"
+                index={index}
+                handleInputChange={handleInputChange}
+              />
+
               <button
-                className="rounded-full text-sm px-4 py-1.5 font-semibold text-black bg-rose-200 hover:bg-rose-300 "
+                className="rounded-full text-xs px-4 py-1.5 font-medium text-white bg-rose-900 hover:bg-rose-700 "
                 type="button"
-                onClick={() => handleRemovePart(index)}
+                onClick={() => removeJobPart(index)}
               >
-                Remove
+                REMOVE PART
               </button>
             </div>
           </div>
         );
       })}
 
-      <div className="flex flex-col items-start gap-2">
+      <div className="flex items-start gap-2">
         <input className="" type="file" onChange={handleFileChange} />
-        <button
-          type="button"
-          onClick={handleFileUpload}
-          className="rounded-full text-sm px-5 py-2 font-medium text-white bg-zinc-800 hover:bg-zinc-500"
-        >
-          Upload files
-        </button>
+        {isEditJob && (
+          <button
+            type="button"
+            onClick={handleFileUpload}
+            className="rounded-full text-sm px-6 py-2.5 font-medium text-white bg-zinc-800 hover:bg-zinc-500"
+          >
+            Upload files
+          </button>
+        )}
       </div>
 
       <div className="flex gap-4 pt-2">
-        {/* <button
-          type="button"
-          className="rounded-full text-sm px-6 py-2.5 font-medium text-white bg-slate-600 hover:bg-slate-500"
-          onClick={handleFile}
-        >
-          Files
-        </button> */}
-        <button className="btn" type="button" onClick={handleAddPart}>
+        <button className="btn" type="button" onClick={addJobPart}>
           Add Part
         </button>
         <div className="flex gap-4 ml-auto">
@@ -219,14 +203,13 @@ const Form = ({
           >
             Delete Job
           </button>
-          {isEditJob && (
-            <button
-              className="rounded-full text-sm px-6 py-2.5 font-medium text-white bg-green-700 hover:bg-green-600"
-              type="submit"
-            >
-              Update Job
-            </button>
-          )}
+
+          <button
+            className="rounded-full text-sm px-6 py-2.5 font-medium text-white bg-green-700 hover:bg-green-600"
+            type="submit"
+          >
+            {isEditJob ? 'Update Job' : 'Submit Job'}
+          </button>
         </div>
       </div>
     </form>

@@ -13,6 +13,8 @@ const initialState = {
     client: '',
     fileName: '',
     downloadURL: null,
+    weldOp: false,
+    bendOp: false,
     jobParts: [
       {
         partName: '',
@@ -33,7 +35,7 @@ const jobsSlice = createSlice({
   reducers: {
     setInputField(state, action) {
       const { name, value, index } = action.payload;
-      if (name === 'client') {
+      if (index === null || index === undefined) {
         state.currentJob[name] = value;
       } else {
         console.log(index, name, value);

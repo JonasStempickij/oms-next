@@ -19,6 +19,12 @@ const Job = new mongoose.Schema(
     downloadURL: {
       type: String,
     },
+    bendOp: {
+      type: Boolean,
+    },
+    weldOp: {
+      type: Boolean,
+    },
   },
   { timestamps: true }
 );

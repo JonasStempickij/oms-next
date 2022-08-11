@@ -14,22 +14,31 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="flex p-5 justify-between font-semibold max-w-screen-2xl mx-auto ">
-      <ul className="flex flex-row gap-5">
-        <li className="hover:text-gray-500">
-          <Link href="/">Dashboard</Link>
-        </li>
+    <nav className="bg-zinc-200 mb-5">
+      <div className="container flex  justify-between  font-medium  mx-auto ">
+        <ul className="flex flex-row ">
+          <Link href="/">
+            <li className="cursor-pointer px-10 py-5 hover:text-gray-500 hover:bg-zinc-100">
+              Dashboard
+            </li>
+          </Link>
+          {userId && (
+            <Link href="/addJob">
+              <li className="cursor-pointer px-10 py-5 hover:text-gray-500 hover:bg-zinc-100">
+                Add Job
+              </li>
+            </Link>
+          )}
+        </ul>
         {userId && (
-          <li className="hover:text-gray-500">
-            <Link href="addJob">Add Job</Link>
-          </li>
+          <button
+            className="cursor-pointer p-5 hover:text-gray-500 hover:bg-zinc-100"
+            onClick={signOut}
+          >
+            Sign Out
+          </button>
         )}
-      </ul>
-      {userId && (
-        <button className="hover:text-gray-500" onClick={signOut}>
-          Sign Out
-        </button>
-      )}
+      </div>
     </nav>
   );
 };

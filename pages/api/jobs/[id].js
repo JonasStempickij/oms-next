@@ -22,10 +22,11 @@ export default async function handler(req, res) {
       break;
     case 'PUT':
       try {
-        const { client, jobParts, fileName, downloadURL } = req.body;
+        const { client, jobParts, fileName, downloadURL, weldOp, bendOp } =
+          req.body;
         const job = await Job.updateOne(
           { _id: id },
-          { client, jobParts, fileName, downloadURL }
+          { client, jobParts, fileName, downloadURL, weldOp, bendOp }
         );
         res.status(200).json({ success: true, data: job });
       } catch (error) {

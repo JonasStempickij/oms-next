@@ -18,13 +18,13 @@ const SearchForm = () => {
 
   return (
     <form
-      className="flex flex-row gap-6 items-end max-w-screen-lg justify-start mx-auto px-5"
+      className="container mx-auto flex flex-row items-end w-full gap-5 "
       onSubmit={handleSubmit}
     >
       <div className="flex flex-col">
         <label className="text-xs text-gray-500">Client</label>
         <input
-          className="h-full w-52 text-base px-4 py-2.5 border border-gray-500 rounded"
+          className=" w-52 text-base px-4 py-2.5 border border-gray-500 rounded"
           type="text"
           value={client}
           onChange={(e) => {
@@ -33,10 +33,10 @@ const SearchForm = () => {
         />
       </div>
 
-      <div className="flex flex-col">
+      <div className="flex flex-col ">
         <label className="text-xs text-gray-500">Material</label>
         <select
-          className="h-full w-52 text-base px-4 py-2.5 border border-gray-500 rounded"
+          className="w-52 px-4 py-2.5 border border-gray-500 rounded"
           name="material"
           value={material}
           onChange={(e) => setMaterial(e.target.value)}
@@ -54,7 +54,7 @@ const SearchForm = () => {
       <div className="flex flex-col">
         <label className="text-xs text-gray-500">Thickness</label>
         <input
-          className="h-full w-20 text-base px-4 py-2.5 border border-gray-500 rounded"
+          className="w-20 text-base px-4 py-2.5 border border-gray-500 rounded"
           type="number"
           value={thickness}
           onChange={(e) => {
@@ -62,7 +62,9 @@ const SearchForm = () => {
           }}
         />
       </div>
-      <button className="btn">Search</button>
+      <button className="px-6 py-2 rounded-full text-sm font-medium text-white bg-sky-700 hover:bg-sky-600">
+        Search
+      </button>
     </form>
   );
 };

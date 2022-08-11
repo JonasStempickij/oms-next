@@ -31,7 +31,7 @@ const ModalWindow = ({ deleteJob, id }) => {
   return (
     <div>
       <button
-        className="rounded-full bg-red-400 hover:bg-red-500 px-4 py-2 text-white font-medium "
+        className="rounded-full bg-red-500 hover:bg-red-400 px-4 py-2 text-white font-medium "
         onClick={() => setModalIsOpen(!modalIsOpen)}
       >
         Remove
