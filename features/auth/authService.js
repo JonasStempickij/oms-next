@@ -2,8 +2,6 @@ import { auth } from '../../lib/firebase';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  sendPasswordResetEmail,
-  confirmPasswordReset,
   sendEmailVerification,
   signOut,
 } from 'firebase/auth';

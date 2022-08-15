@@ -38,7 +38,6 @@ const jobsSlice = createSlice({
       if (index === null || index === undefined) {
         state.currentJob[name] = value;
       } else {
-        console.log(index, name, value);
         state.currentJob.jobParts[index][name] = value;
       }
     },
@@ -47,7 +46,6 @@ const jobsSlice = createSlice({
     },
     removeJobPart(state, action) {
       const index = action.payload;
-      console.log(index);
       state.currentJob.jobParts.splice(index, 1);
     },
     setFileName(state, action) {
@@ -65,7 +63,6 @@ const jobsSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(addJob.fulfilled, (state, action) => {
-        console.log(action.payload);
         state.isLoading = false;
         state.currentJob = action.payload.data;
       })

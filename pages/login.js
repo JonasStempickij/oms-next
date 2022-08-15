@@ -1,23 +1,32 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { loginUser } from '../features/auth/authSlice';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
-
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const { userId, isError, errorMessage } = useSelector(
+    (state) => state.authState
+  );
+
   const router = useRouter();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(errorMessage);
+    }
+    if (userId) router.push('/');
+  }, [isError, errorMessage, userId, router]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await dispatch(loginUser({ email, password }));
-      router.push('/');
     } catch (error) {
       console.log(err);
     }
@@ -51,15 +60,9 @@ export default function Login() {
           setPassword(e.target.value);
         }}
       />
-      <Link href="/recovery">
-        <a className="text-xs">Password recovery</a>
-      </Link>
       <button className="w-full rounded-full bg-violet-600 px-4 py-2 text-white font-semibold ">
         Login
       </button>
-      <Link href="/register">
-        <a>Don&apos;t have account ?</a>
-      </Link>
     </form>
   );
 }

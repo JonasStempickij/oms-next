@@ -2,13 +2,11 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Router from 'next/router';
+import Head from 'next/head';
 
 import { uploadFile } from '../lib/firebase';
-import Head from 'next/head';
 import { toast } from 'react-toastify';
 import Form from '../components/Form';
-
-import { materialOptions } from '../lib/materialOptions';
 
 import {
   addJob,
@@ -26,7 +24,7 @@ export default function AddJob() {
     (state) => state.jobState
   );
   const [file, setFile] = useState(null);
-  const { client, jobParts, fileName } = currentJob;
+  const { client, jobParts } = currentJob;
 
   useEffect(() => {
     dispatch(reset());

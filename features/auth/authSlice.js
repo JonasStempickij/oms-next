@@ -2,11 +2,11 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import authService from './authService';
 
 const initialState = {
-  userId: '',
+  userId: null,
   isError: false,
   isSuccess: false,
   isLoading: false,
-  message: '',
+  errorMessage: null,
 };
 
 const authSlice = createSlice({
@@ -14,11 +14,11 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     reset: (state) => {
-      state.userId = '';
+      state.userId = null;
       state.isLoading = false;
       state.isError = false;
       state.isSuccess = false;
-      state.message = '';
+      state.errorMessage = null;
     },
     checkUser: (state, action) => {
       state.userId = action.payload;
@@ -37,11 +37,14 @@ const authSlice = createSlice({
       .addCase(createUser.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
-        state.message = action.payload;
+        state.errorMessage = action.payload;
         state.userId = null;
       })
       .addCase(loginUser.pending, (state) => {
+        state.userId = null;
         state.isLoading = true;
+        state.isError = false;
+        state.errorMessage = null;
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.isLoading = false;
@@ -52,6 +55,7 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.isError = true;
         state.userId = null;
+        state.errorMessage = action.payload;
       })
       .addCase(signOutUser.fulfilled, (state) => {
         state.userId = null;
@@ -59,7 +63,6 @@ const authSlice = createSlice({
   },
 });
 
-// Register / Create User
 export const createUser = createAsyncThunk(
   'auth/createUser',
   async (user, thunkAPI) => {
@@ -77,12 +80,16 @@ export const createUser = createAsyncThunk(
   }
 );
 
-// Login User
 export const loginUser = createAsyncThunk(
   'auth/loginUser',
   async (user, thunkAPI) => {
     try {
-      return await authService.loginUser(user);
+      const response = await authService.loginUser(user);
+      if (response.includes('auth/')) {
+        return thunkAPI.rejectWithValue(response);
+      } else {
+        return response;
+      }
     } catch (error) {
       const message =
         (error.response &&
@@ -95,7 +102,6 @@ export const loginUser = createAsyncThunk(
   }
 );
 
-// Sign Out User
 export const signOutUser = createAsyncThunk(
   'auth/signOut',
   async (_, thunkAPI) => {

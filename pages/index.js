@@ -5,6 +5,7 @@ import { getJobs, deleteJob } from '../features/jobs/jobsSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import SearchForm from '../components/SearchForm';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -32,13 +33,17 @@ export default function Home() {
 
       <main className="container mx-auto px-10 flex flex-col gap-10">
         <SearchForm />
-        <div className="self-center md:columns-2 xl:columns-3 2xl:columns-4">
-          {jobs.map((job, index) => {
-            return (
-              <JobCard job={job} key={index} deleteJob={handleDeleteJob} />
-            );
-          })}
-        </div>
+        {isLoading ? (
+          <LoadingSpinner />
+        ) : (
+          <div className="self-center md:columns-2 xl:columns-3 2xl:columns-4">
+            {jobs.map((job, index) => {
+              return (
+                <JobCard job={job} key={index} deleteJob={handleDeleteJob} />
+              );
+            })}
+          </div>
+        )}
       </main>
     </div>
   );
